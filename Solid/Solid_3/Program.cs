@@ -1,47 +1,44 @@
 ﻿using System;
 
-class Rectangle
+abstract class Shape
+{
+    public abstract int GetArea();
+}
+
+class Rectangle : Shape
 {
     public virtual int Width { get; set; }
     public virtual int Height { get; set; }
-    public int GetRectangleArea()
+
+    public Rectangle(int width, int height)
     {
-        return Width * Height;
+        Width = width;
+        Height = height;
     }
+    public override int GetArea() => Width * Height;
 }
 
-//квадрат наслідується від прямокутника!!!
-class Square : Rectangle
+class Square : Shape
 {
-    public override int Width
+    public int Side { get; set; }
+
+    public Square(int side)
     {
-        get { return base.Width; }
-        set
-        {
-            base.Height = value;
-            base.Width = value;
-        }
+        Side = side;
     }
-    public override int Height
-    {
-        get { return base.Height; }
-        set
-        {
-            base.Height = value;
-            base.Width = value;
-        }
-    }
+
+    public override int GetArea() => Side * Side;
 
     class Program
     {
         static void Main(string[] args)
         {
-            Rectangle rect = new Square();
-            rect.Width = 5;
-            rect.Height = 10;
+            Shape rect = new Rectangle(5, 10);
+            Shape square = new Square(5);
 
-            Console.WriteLine(rect.GetRectangleArea());
-            //Відповідь 100? Що не так???
+            Console.WriteLine(rect.GetArea());   
+            Console.WriteLine(square.GetArea()); 
+
             Console.ReadKey();
         }
     }
