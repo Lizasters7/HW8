@@ -8,22 +8,72 @@
 Опишіть класи книжки (розмір та колір не потрібні, але потрібна ціна та знижки) та верхній одяг (колір, розмір, ціна знижка),
 які реалізують притаманні їм інтерфейси.*/
 
-interface IItem
+interface IPriceable
+{
+    void SetPrice(double price);
+}
+
+interface IDiscountable
 {
     void ApplyDiscount(String discount);
+}
+
+interface IPromocodable
+{
     void ApplyPromocode(String promocode);
+}
 
+interface IColorable
+{
     void SetColor(byte color);
-    void SetSize(byte size);
+}
 
-    void SetPrice(double price);
+interface ISizeable
+{
+    void SetSize(byte size);
+}
+
+class Book : IPriceable, IDiscountable, IPromocodable
+{
+    public double Price { get; private set; }
+    public string Discount { get; private set; }
+    public string Promocode { get; private set; }
+
+    public void SetPrice(double price) { Price = price; }
+    public void ApplyDiscount(String discount) { Discount = discount; }
+    public void ApplyPromocode(String promocode) { Promocode = promocode; }
+}
+
+class OuterWear : IPriceable, IDiscountable, IColorable, ISizeable
+{
+    public double Price { get; private set; }
+    public string Discount { get; private set; }
+    public byte Color { get; private set; }
+    public byte Size { get; private set; }
+
+    public void SetPrice(double price) { Price = price; }
+    public void ApplyDiscount(String discount) { Discount = discount; }
+    public void SetColor(byte color) { Color = color; }
+    public void SetSize(byte size) { Size = size; }
 }
 
 class Program
 {
     static void Main(string[] args)
     {
-       
+        var book = new Book();
+        book.SetPrice(250);
+        book.ApplyDiscount("10%");
+
+        var jacket = new OuterWear();
+        jacket.SetPrice(2000);
+        jacket.SetColor(3);
+        jacket.SetSize(48);
+        jacket.ApplyDiscount("20%");
+
+        Console.WriteLine($"The book: {book.Price} hrn, the discount: {book.Discount}");
+        Console.WriteLine($"The jacket: {jacket.Price} hrn, the size: {jacket.Size}, the discount: {jacket.Discount}");
+
         Console.ReadKey();
     }
 }

@@ -30,9 +30,9 @@ namespace Solid1
         public void ShowOrder(Order order)
         {
             foreach (var item in order.GetItems())
-                Console.WriteLine($"{item.Name} - {item.Price} грн");
+                Console.WriteLine($"{item.Name} - {item.Price} hrn");
 
-            Console.WriteLine($"Разом: {order.CalculateTotalSum()} грн");
+            Console.WriteLine($"Sum: {order.CalculateTotalSum()} hrn");
         }
     }
 
@@ -49,8 +49,8 @@ namespace Solid1
         static void Main()
         {
             var order = new Order();
-            order.AddItem(new Item { Name = "Книга", Price = 250 });
-            order.AddItem(new Item { Name = "Ручка", Price = 20 });
+            order.AddItem(new Item { Name = "Book", Price = 250 });
+            order.AddItem(new Item { Name = "Pen", Price = 20 });
 
             var printer = new OrderPrinter();
             printer.ShowOrder(order);
