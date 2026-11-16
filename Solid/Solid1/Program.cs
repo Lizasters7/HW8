@@ -6,47 +6,58 @@ using System.Threading.Tasks;
 
 namespace Solid1
 {
-    //Який принцип S.O.L.I.D. порушено? Виправте!
     class Item
     {
-
+        public string Name { get; set; }
+        public double Price { get; set; }
     }
+
     class Order
     {
-        private List<Item> itemList;
+        private readonly List<Item> itemList = new List<Item>();
 
-        internal List<Item> ItemList
+        public IReadOnlyList<Item> GetItems() => itemList;
+        public int GetItemCount() => itemList.Count;
+        public double CalculateTotalSum() => itemList.Sum(i => i.Price);
+
+        public void AddItem(Item item) => itemList.Add(item);
+        public void DeleteItem(Item item) => itemList.Remove(item);
+    }
+
+    class OrderPrinter
+    {
+        public void PrintOrder(Order order) { /* ... */ }
+        public void ShowOrder(Order order)
         {
-            get
-            {
-                return itemList;
-            }
+            foreach (var item in order.GetItems())
+                Console.WriteLine($"{item.Name} - {item.Price} грн");
 
-            set
-            {
-                itemList = value;
-            }
+            Console.WriteLine($"Разом: {order.CalculateTotalSum()} грн");
         }
+    }
 
-        public void CalculateTotalSum() {/*...*/}
-        public void GetItems() {/*...*/}
-        public void GetItemCount() {/*...*/}
-        public void AddItem(Item item) {/*...*/}
-        public void DeleteItem(Item item) {/*...*/}
-
-        public void PrintOrder() {/*...*/}
-        public void ShowOrder() {/*...*/}
-
-        public void Load() {/*...*/}
-        public void Save() {/*...*/}
-        public void Update() {/*...*/}
-        public void Delete() {/*...*/}
+    class OrderRepository
+    {
+        public Order Load(int id) { /* ... */ return new Order(); }
+        public void Save(Order order) { /* ... */ }
+        public void Update(Order order) { /* ... */ }
+        public void Delete(Order order) { /* ... */ }
     }
 
     class Program
     {
         static void Main()
         {
+            var order = new Order();
+            order.AddItem(new Item { Name = "Книга", Price = 250 });
+            order.AddItem(new Item { Name = "Ручка", Price = 20 });
+
+            var printer = new OrderPrinter();
+            printer.ShowOrder(order);
+
+            var repository = new OrderRepository();
+            repository.Save(order);
+            Console.ReadKey();
         }
     }
 }
