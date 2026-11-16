@@ -1,12 +1,10 @@
 ﻿using System;
 
-//Який принцип S.O.L.I.D. порушено? Виправте!
+interface ILogger
+{
+    void Log(string message);
+}
 
-/*Зверніть увагу на клас EmailSender. Крім того, що за допомогою методу Send, він відправляє повідомлення, 
-він ще і вирішує як буде вестися лог. В даному прикладі лог ведеться через консоль.
-Якщо трапиться так, що нам доведеться міняти спосіб логування, то ми будемо змушені внести правки в клас EmailSender.
-Хоча, здавалося б, ці правки не стосуються відправки повідомлень. Очевидно, EmailSender виконує кілька обов'язків і, 
-щоб клас ні прив'язаний тільки до одного способу вести лог, потрібно винести вибір балки з цього класу.*/
 class Email
 {
     public String Theme { get; set; }
@@ -14,12 +12,27 @@ class Email
     public String To { get; set; }
 }
 
+class ConsoleLogger : ILogger
+{
+    public void Log(string message)
+    {
+        Console.WriteLine(message);
+    }
+}
+
 class EmailSender
 {
+    private readonly ILogger logger;
+
+    public EmailSender(ILogger logger)
+    {
+        this.logger = logger;
+    }
+
     public void Send(Email email)
     {
         // ... sending...
-        Console.WriteLine("Email from '" + email.From + "' to '" + email.To + "' was send");
+        logger.Log("Email from '" + email.From + "' to '" + email.To + "' was sent");
     }
 }
 
@@ -34,7 +47,7 @@ class Program
         Email e5 = new Email() { From = "Me", To = "Vasya", Theme = "Yes" };
         Email e6 = new Email() { From = "Vasya", To = "Petya", Theme = "+2" };
 
-        EmailSender es = new EmailSender();
+        EmailSender es = new EmailSender(new ConsoleLogger());
         es.Send(e1);
         es.Send(e2);
         es.Send(e3);
